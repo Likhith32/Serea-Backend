@@ -11,7 +11,7 @@ from pydantic import BaseModel
 
 from config import settings
 from pdf_parser import parse_pdf, PDFParsingError, get_pdf_form_fields, fill_pdf_form
-from summarizer import chunk_text, summarize_chunks_map_reduce, summarize_by_keyword, search_text, call_gemini
+from summarizer import chunk_text, summarize_text, summarize_by_keyword, search_text, call_gemini
 
 
 app = FastAPI(title="PDF Summarizer & Keyword Tools API")
@@ -135,7 +135,7 @@ def summarize(request: SummarizeRequest):
     session_data = sessions[session_id]
     
     try:
-        summary_text = summarize_chunks_map_reduce(session_data["chunks"])
+        summary_text = summarize_text(session_data["full_text"])
         return {"summary": summary_text}
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
