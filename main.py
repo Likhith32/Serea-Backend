@@ -4,7 +4,7 @@ import re
 import io
 import json
 from typing import Dict, Any, List
-from fastapi import FastAPI, UploadFile, File, HTTPException, BackgroundTasks
+from fastapi import FastAPI, UploadFile, File, HTTPException, BackgroundTasks, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
@@ -71,6 +71,11 @@ class FillFormRequest(BaseModel):
     session_id: str
     field_values: Dict[str, Any] = None
 
+
+@app.get("/health")
+@app.head("/health")
+async def health():
+    return {"status": "ok"}
 
 @app.get("/")
 def read_root():
